@@ -5,6 +5,7 @@
  The scanner with ADF but without duplex feature will generate have two PDFs:
  * PDF 1 (front.pdf): Contains the front sides of the pages (1, 3, 5, ...).
  * PDF 2 (back.pdf): Contains the back sides of the pages in reverse order (..., 6, 4, 2).
+ 
  The goal is to create a single PDF with the correct page order (1, 2, 3, 4, 5, 6, ...).
 
 # Tool Include
