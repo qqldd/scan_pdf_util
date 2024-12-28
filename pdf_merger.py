@@ -1,7 +1,7 @@
 import sys
 import os
 from pypdf import PdfReader, PdfWriter
-from pdf_renamer import genai_filename
+from pdf_renamer import genai_rename
 
 def reverse_pdf(input_path, output_path):
     reader = PdfReader(input_path)
@@ -49,13 +49,9 @@ if __name__ == "__main__":
         reverse_pdf(back_pdf_path, reversed_back_pdf_path)
         interleave_pdfs(front_pdf_path, reversed_back_pdf_path, "combined.pdf")
         os.remove(reversed_back_pdf_path)
+        genai_rename("combined.pdf")
 
-        input_pdf = "combined.pdf"
-        renamed_pdf_name = genai_filename(input_pdf)
-        full_renamed_path = os.path.join(os.path.dirname(input_pdf), renamed_pdf_name.strip())
-        os.rename(input_pdf, full_renamed_path)
-
-        print(f"PDFs merged successfully! Output: {renamed_pdf_name}")
+        print(f"PDFs merged successfully!")
         input("Press Enter to exit...")
     except Exception as e:
         print(f"An error occurred: {e}")

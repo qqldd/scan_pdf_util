@@ -1,5 +1,6 @@
 import base64
 import os
+import shutil
 import sys
 import google.generativeai as genai
 
@@ -22,6 +23,19 @@ def genai_filename(input_pdf):
         output=response.text
     return output
 
+def genai_rename(input_pdf):
+    renamed_pdf_name = genai_filename(input_pdf).strip()
+    full_renamed_path = os.path.join(os.path.dirname(input_pdf), renamed_pdf_name)
+    if os.path.exists(full_renamed_path):
+        print(f"Error: File already exists: {full_renamed_path}")
+        input("Press Enter to exit...")
+        sys.exit(1)
+    shutil.copy2(input_pdf, full_renamed_path)
+    print(f"PDFs renamed to: {renamed_pdf_name}; Original name: {os.path.basename(input_pdf)}")
+    key = input("Delete original file (Y/N)? Default Y: ")
+    if key == "" or key.lower() == "y":
+        os.remove(input_pdf)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -38,12 +52,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        renamed_pdf_name = genai_filename(input_pdf)
-        full_renamed_path = os.path.join(os.path.dirname(input_pdf), renamed_pdf_name.strip())
-        os.rename(input_pdf, full_renamed_path)
-
-        print(f"PDFs renamed to: {renamed_pdf_name}")
-        input("Press Enter to exit...")
+        genai_rename(input_pdf)
     except Exception as e:
         print(f"An error occurred: {e}")
         input("Press Enter to exit...")
